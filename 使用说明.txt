@@ -1,0 +1,25 @@
+将所有文件均拷贝到ryu/ryu/app/Alg1目录下
+
+cd ryu/ryu/app/alg1
+
+1.在mininet运行如下命令 (Note that the ip address of controller may be different, check it from the addr of eth0 in your pc):
+
+sudo mn --switch ovs,protocols=OpenFlow13 --custom A_topo8.py --topo mytopo --link tc,delay=10ms --controller=remote,ip=10.0.2.15,port=6633
+
+2.在ryu执行如下命令：
+
+ryu-manager --verbose --observe-links ryuappofalg1.py
+
+3.在mininet中
+pingall
+（最好连续ping 2到3次保证拓扑被完全发现）
+
+4.alg1得出的策略相关路径流表大约在程序执行后  200s 左右下发
+
+5. Transmit data-flow from all hosts to all Middlebox-hosts, and let ryu-app (network_monitor) measure the throughput.
+
+6.可通过如下命令在mininet查看下发的流表：
+ovs-ofctl --protocols=OpenFlow13 dump-flows s1
+
+7.特别说明：
+	链路的 带宽 是在 A_manually_input_para_settings.txt & A_topo8.py 中写死的，and delay is determined by mininet-startup-command 中的：--link tc,delay=10ms
